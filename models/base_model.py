@@ -1,7 +1,7 @@
 #!usr/bin/python3
 """Defines the BaseModel class"""
 
-from models import storage
+import models
 from datetime import datetime
 from uuid import uuid4
 
@@ -28,7 +28,7 @@ class BaseModel:
                 else:
                     self.__dict__[k] = v
         else:
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """Return string representation of BaseModel instance."""
@@ -38,7 +38,7 @@ class BaseModel:
     def save(self):
         """Updates attribute updated_at with the current datetime."""
         self.updated_at = datetime.today()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Return the dictionary of the BaseModel instance.
