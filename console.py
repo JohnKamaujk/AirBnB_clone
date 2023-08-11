@@ -55,24 +55,25 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def default(self, arg):
-        """Default behavior for the cmd module with . notation """
+        """When user inputs a command that does not match any method"""
         argdict = {
             "all": self.do_all,
             "show": self.do_show,
             "destroy": self.do_destroy,
             "count": self.do_count,
-            "update": self.do_update
+            "update": self.do_update,
+            "create": self.do_create
         }
-        match = re.search(r"\.", arg)
-        if match is not None:
-            argl = [arg[:match.span()[0]], arg[match.span()[1]:]
-                    ]
-            match = re.search(r"\((.*?)\)", argl[1])
-            if match is not None:
-                command = [argl[1][:match.span()[0]], match.group()[
+        dot_syntax = re.search(r"\.", arg)
+        if dot_syntax is not None:
+            arg_list = [arg[:dot_syntax.span()[0]], arg[dot_syntax.span()[1]:]
+                        ]
+            brackets_match = re.search(r"\((.*?)\)", arg_list[1])
+            if brackets_match is not None:
+                command = [arg_list[1][:brackets_match.span()[0]], brackets_match.group()[
                     1:-1]]
                 if command[0] in argdict.keys():
-                    call = "{} {}".format(argl[0], command[1])
+                    call = "{} {}".format(arg_list[0], command[1])
                     return argdict[command[0]](call)
         print("*** Unknown syntax: {}".format(arg))
         return False
