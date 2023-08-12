@@ -15,38 +15,40 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     def default(self, line_data):
-        """" handles unverified_data commands"""
+        """" handles unchkd_data commands"""
         self._precmd(line_data)
 
     def _precmd(self, line_data):
         """Tests commands for class.syntax()"""
-        verified_data = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line_data)
+        chkd_data = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line_data)
         # egUser.show("877548969gygy")
-        if not verified_data:
+        if not chkd_data:
             return line_data
-        classname = verified_data.group(1)  # eg User
-        method = verified_data.group(2)  # show
-        args = verified_data.group(3)  # "877548969gygy"
-        verified_data_uid_and_args = re.search('^"([^"]*)"(?:, (.*))?$', args)
-        if verified_data_uid_and_args:
-            uid = verified_data_uid_and_args.group(1)
-            dict_or_attr = verified_data_uid_and_args.group(2)
+        classname = chkd_data.group(1)  # eg User
+        method = chkd_data.group(2)  # show
+        args = chkd_data.group(3)  # "877548969gygy"
+        chkd_data_uid_and_args = re.search('^"([^"]*)"(?:, (.*))?$', args)
+        if chkd_data_uid_and_args:
+            uid = chkd_data_uid_and_args.group(1)
+            dict_or_attr = chkd_data_uid_and_args.group(2)
         else:
             uid = args
             dict_or_attr = False
 
         attr_and_value = ""
         if method == "update" and dict_or_attr:
-            verified_data_dict = re.search('^({.*})$', dict_or_attr)
-            if verified_data_dict:
-                self.update_dict(classname, uid, verified_data_dict.group(1))
+            chkd_data_dict = re.search('^({.*})$', dict_or_attr)
+            if chkd_data_dict:
+                self.update_dict(classname, uid, chkd_data_dict.group(1))
                 return ""
-            verified_data_attr_and_value = re.search(
+            chkd_data_attr_and_value = re.search(
                 '^(?:"([^"]*)")?(?:, (.*))?$', dict_or_attr)
-            if verified_data_attr_and_value:
-                attr_and_value = (verified_data_attr_and_value.group(
-                    1) or "") + " " + (verified_data_attr_and_value.group(2) or "")
-        user_command = method + " " + classname + " " + uid + " " + attr_and_value
+            if chkd_data_attr_and_value:
+                attr_and_value = (chkd_data_attr_and_value.group(
+                    1) or "") + " " + (
+                    chkd_data_attr_and_value.group(2) or "")
+        user_command = method + " " + classname + " " + uid + " "
+        + attr_and_value
         self.onecmd(user_command)  # show User "877548969gygy"
         return user_command
 
@@ -161,10 +163,10 @@ class HBNBCommand(cmd.Cmd):
         elif content[0] not in storage.classes():
             print("** class doesn't exist **")
         else:
-            verified_dataes = [
+            chkd_dataes = [
                 k for k in storage.all() if k.startswith(
                     content[0] + '.')]
-            print(len(verified_dataes))
+            print(len(chkd_dataes))
 
     def do_update(self, line_data):
         """Updates an instance by adding or updating property.
@@ -174,12 +176,12 @@ class HBNBCommand(cmd.Cmd):
             return
 
         rex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
-        verified_data = re.search(rex, line_data)
-        classname = verified_data.group(1)
-        uid = verified_data.group(2)
-        attribute = verified_data.group(3)
-        value = verified_data.group(4)
-        if not verified_data:
+        chkd_data = re.search(rex, line_data)
+        classname = chkd_data.group(1)
+        uid = chkd_data.group(2)
+        attribute = chkd_data.group(3)
+        value = chkd_data.group(4)
+        if not chkd_data:
             print("** class name missing **")
         elif classname not in storage.classes():
             print("** class doesn't exist **")
